@@ -4,36 +4,36 @@
 
 int main()
 {
-	fprintf(stderr, "This file demonstrates a simple double-free attack with fastbins.\n");
+	fprintf(stderr, "这个文件演示了一个简单的利用fastbin实现的double-free攻击。\n");
 
-	fprintf(stderr, "Allocating 3 buffers.\n");
+	fprintf(stderr, "分配3个缓冲区。\n");
 	int *a = malloc(8);
 	int *b = malloc(8);
 	int *c = malloc(8);
 
-	fprintf(stderr, "1st malloc(8): %p\n", a);
-	fprintf(stderr, "2nd malloc(8): %p\n", b);
-	fprintf(stderr, "3rd malloc(8): %p\n", c);
+	fprintf(stderr, "第一次调用malloc(8)分配的地址: %p\n", a);
+	fprintf(stderr, "第二次调用malloc(8)分配的地址: %p\n", b);
+	fprintf(stderr, "第三次调用malloc(8)分配的地址: %p\n", c);
 
-	fprintf(stderr, "Freeing the first one...\n");
+	fprintf(stderr, "现在释放掉a...\n");
 	free(a);
 
-	fprintf(stderr, "If we free %p again, things will crash because %p is at the top of the free list.\n", a, a);
+	fprintf(stderr, "如果我们再一次释放a: %p, 程序将会崩溃，原因是 %p 位于free list的顶部。\n", a, a);
 	// free(a);
 
-	fprintf(stderr, "So, instead, we'll free %p.\n", b);
+	fprintf(stderr, "所以，我们free b来代替它 %p。\n", b);
 	free(b);
 
-	fprintf(stderr, "Now, we can free %p again, since it's not the head of the free list.\n", a);
+	fprintf(stderr, "现在, 我们可以再次释放a: %p 了, 因为现在a已经不在free list头了。\n", a);
 	free(a);
 
-	fprintf(stderr, "Now the free list has [ %p, %p, %p ]. If we malloc 3 times, we'll get %p twice!\n", a, b, a, a);
+	fprintf(stderr, "现在free list中含有[ %p, %p, %p ]。如果我们继续调用三次malloc, free list中a: %p 却出现了两次!\n", a, b, a, a);
 	a = malloc(8);
 	b = malloc(8);
 	c = malloc(8);
-	fprintf(stderr, "1st malloc(8): %p\n", a);
-	fprintf(stderr, "2nd malloc(8): %p\n", b);
-	fprintf(stderr, "3rd malloc(8): %p\n", c);
+	fprintf(stderr, "第一次调用malloc(8)分配的地址: %p\n", a);
+	fprintf(stderr, "第二次调用malloc(8)分配的地址: %p\n", b);
+	fprintf(stderr, "第三次调用malloc(8)分配的地址: %p\n", c);
 
 	assert(a == c);
 	return 0;
