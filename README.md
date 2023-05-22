@@ -50,10 +50,10 @@
 
 获取仓库
 
-```
+```bash
 git clone https://github.com/ffreeez/how2heap_zh
 cd ./how2heap_zh
-git 
+git submodule update --init --recursive
 ```
 
 在根目录下直接make即可
@@ -64,13 +64,38 @@ $ make
 ```
 
 使用glibc_run.sh来执行可执行文件，可以更方便的替换glibc
+在使用这个脚本之前，需要安装`patchelf`，并且要在`glibc-all-in-one`项目中更新可下载的列表
+
+```bash
+$ sudo apt install patchelf
+```
+
+```bash
+$ cd ./how2heap_zh/glibc-all-in-one
+$ chmod +x ./*
+$ ./update_list
+```
+
+执行`update_list`时，可能会提示`-bash: ./update_list: /usr/bin/python: bad interpreter: No such file or directory`
+，在文本编辑器中把`update_list`文件中的第一行`#!/usr/bin/python`改为`#!/usr/bin/python3`即可
+
+```
+[用法] ./glibc_run.sh <glibc版本号> <可执行文件> [-h] [-i686] [-u] [-r] [-gdb | -r2 | -p]
+-i686 -使用32位的libc
+-u 在glibc-all-in-one中更新libc列表
+-r 在glibc-all-in-one中下载libc
+-gdb -在gdb中执行目标文件
+-r2 -在radare2中执行目标文件
+-p -只在可执行文件中修改interpreter和rpath来指向对应的glibc并且不执行
+```
+
 
 Gnu Libc 正在不断发展，上面的几种技术已经允许在 malloc/free 逻辑中引入一致性检查。
 因此，这些检查会定期破坏某些技术，并需要进行调整以绕过它们（如果可能）。
 我们通过为每个需要调整的 Glibc 版本保留相同技术的多个版本来解决此问题。
 项目结构为`glibc_<version>/技术名称.c`
 
-# Heap Exploitation Tools
+# 堆利用工具
 
 这里有一些广为流传的堆利用工具，具体内容暂不做翻译（懒懒。
 
