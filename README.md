@@ -87,6 +87,8 @@ $ ./update_list
 -gdb -在gdb中执行目标文件
 -r2 -在radare2中执行目标文件
 -p -只在可执行文件中修改interpreter和rpath来指向对应的glibc并且不执行
+
+eg: ./glibc_run.sh 2.23 ./first_fit
 ```
 
 
