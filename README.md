@@ -51,9 +51,9 @@
 获取仓库
 
 ```bash
-git clone https://github.com/ffreeez/how2heap_zh
-cd ./how2heap_zh
-git submodule update --init --recursive
+$ git clone https://github.com/ffreeez/how2heap_zh
+$ cd ./how2heap_zh
+$ git submodule update --init --recursive
 ```
 
 在根目录下直接make即可
